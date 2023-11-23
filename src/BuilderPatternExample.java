@@ -1,56 +1,134 @@
-// Step 1: Define Builder interface
-interface PizzaBuilder {
-    void buildDough();
-    void buildSauce();
-    void buildTopping();
-}
+// Product class
+class Computer {
+    private String processor;
+    private int ramGB;
+    private int storageGB;
+    private String operatingSystem;
 
-// Step 2: Concrete Builders
-class MargheritaPizzaBuilder implements PizzaBuilder {
-    private StringBuilder pizza;
-
-    public MargheritaPizzaBuilder() {
-        this.pizza = new StringBuilder("Margherita Pizza");
-    }
+    // Getters and setters...
 
     @Override
-    public void buildDough() {
-        pizza.append(" with Thin Crust");
-    }
-
-    @Override
-    public void buildSauce() {
-        pizza.append(" and Tomato Sauce");
-    }
-
-    @Override
-    public void buildTopping() {
-        pizza.append(" and Mozzarella Cheese");
-    }
-
-    public String getPizza() {
-        return pizza.toString();
+    public String toString() {
+        return "Computer{" +
+                "processor='" + processor + '\'' +
+                ", ramGB=" + ramGB +
+                ", storageGB=" + storageGB +
+                ", operatingSystem='" + operatingSystem + '\'' +
+                '}';
     }
 }
 
-// Similar implementation for a different pizza type
+// Builder interface
+interface ComputerBuilder {
+    void buildProcessor();
+    void buildRAM();
+    void buildStorage();
+    void buildOperatingSystem();
+    Computer getComputer();
+}
 
-// Step 3: Director Class
-class PizzaDirector {
-    public void constructPizza(PizzaBuilder pizzaBuilder) {
-        pizzaBuilder.buildDough();
-        pizzaBuilder.buildSauce();
-        pizzaBuilder.buildTopping();
+// Concrete Builder
+class GamingComputerBuilder implements ComputerBuilder {
+    private Computer computer;
+
+    public GamingComputerBuilder() {
+        this.computer = new Computer();
+    }
+
+    @Override
+    public void buildProcessor() {
+        computer.setProcessor("Intel i9");
+    }
+
+    @Override
+    public void buildRAM() {
+        computer.setRamGB(32);
+    }
+
+    @Override
+    public void buildStorage() {
+        computer.setStorageGB(2000);
+    }
+
+    @Override
+    public void buildOperatingSystem() {
+        computer.setOperatingSystem("Windows 10");
+    }
+
+    @Override
+    public Computer getComputer() {
+        return computer;
     }
 }
 
-// Step 4: Client Code
-public class BuilderPatternExample {
+// Director class
+class ComputerAssembler {
+    private ComputerBuilder computerBuilder;
+
+    public void setComputerBuilder(ComputerBuilder computerBuilder) {
+        this.computerBuilder = computerBuilder;
+    }
+
+    public Computer assembleComputer() {
+        computerBuilder.buildProcessor();
+        computerBuilder.buildRAM();
+        computerBuilder.buildStorage();
+        computerBuilder.buildOperatingSystem();
+        return computerBuilder.getComputer();
+    }
+}
+
+class LaptopBuilder implements ComputerBuilder {
+    private Computer computer;
+
+    public LaptopBuilder() {
+        this.computer = new Computer();
+    }
+
+    @Override
+    public void buildProcessor() {
+        computer.setProcessor("Intel i5");
+    }
+
+    @Override
+    public void buildRAM() {
+        computer.setRamGB(16);
+    }
+
+    @Override
+    public void buildStorage() {
+        computer.setStorageGB(512);
+    }
+
+    @Override
+    public void buildOperatingSystem() {
+        computer.setOperatingSystem("Windows 11");
+    }
+
+    @Override
+    public Computer getComputer() {
+        return computer;
+    }
+}
+
+
+// Client
+class BuilderClient {
     public static void main(String[] args) {
-        PizzaBuilder margheritaPizzaBuilder = new MargheritaPizzaBuilder();
-        PizzaDirector pizzaDirector = new PizzaDirector();
+        ComputerAssembler computerAssembler = new ComputerAssembler();
 
-        pizzaDirector.constructPizza(margheritaPizzaBuilder);
-        System.out.println(((MargheritaPizzaBuilder) margheritaPizzaBuilder).getPizza());
+        // Gaming Computer
+        ComputerBuilder gamingComputerBuilder = new GamingComputerBuilder();
+        computerAssembler.setComputerBuilder(gamingComputerBuilder);
+        Computer gamingComputer = computerAssembler.assembleComputer();
+        System.out.println("Gaming Computer: " + gamingComputer);
+		
+		System.out.println();
+
+        // Laptop
+        ComputerBuilder laptopBuilder = new LaptopBuilder();
+        computerAssembler.setComputerBuilder(laptopBuilder);
+        Computer laptop = computerAssembler.assembleComputer();
+        System.out.println("Laptop: " + laptop);
     }
 }
