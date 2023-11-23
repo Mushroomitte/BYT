@@ -61,23 +61,7 @@ class GamingComputerBuilder implements ComputerBuilder {
     }
 }
 
-// Director class
-class ComputerAssembler {
-    private ComputerBuilder computerBuilder;
-
-    public void setComputerBuilder(ComputerBuilder computerBuilder) {
-        this.computerBuilder = computerBuilder;
-    }
-
-    public Computer assembleComputer() {
-        computerBuilder.buildProcessor();
-        computerBuilder.buildRAM();
-        computerBuilder.buildStorage();
-        computerBuilder.buildOperatingSystem();
-        return computerBuilder.getComputer();
-    }
-}
-
+// Concrete Builder
 class LaptopBuilder implements ComputerBuilder {
     private Computer computer;
 
@@ -110,6 +94,25 @@ class LaptopBuilder implements ComputerBuilder {
         return computer;
     }
 }
+
+
+// Director class
+class ComputerAssembler {
+    private ComputerBuilder computerBuilder;
+
+    public void setComputerBuilder(ComputerBuilder computerBuilder) {
+        this.computerBuilder = computerBuilder;
+    }
+
+    public Computer assembleComputer() {
+        computerBuilder.buildProcessor();
+        computerBuilder.buildRAM();
+        computerBuilder.buildStorage();
+        computerBuilder.buildOperatingSystem();
+        return computerBuilder.getComputer();
+    }
+}
+
 
 
 // Client
